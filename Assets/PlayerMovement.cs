@@ -31,6 +31,9 @@ public class Movement : MonoBehaviour
         // Detect movement and set isMoving parameter
         float horizontalInput = Input.GetAxisRaw("Horizontal");
 
+        // Update isGrounded in Update method as well
+        isGrounded = Physics2D.OverlapCircle(groundCheckPoint.transform.position, groundCheckRadius, groundLayer);
+
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             Jump();
@@ -41,14 +44,11 @@ public class Movement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        isGrounded = Physics2D.OverlapCircle(groundCheckPoint.transform.position, groundCheckRadius, groundLayer);
-
         float horizontalInput = Input.GetAxisRaw("Horizontal");
         Move(horizontalInput);
     }
 
     private void Move(float horizontalInput)
-
     {
         if (horizontalInput != 0) // Player is moving horizontally
         {

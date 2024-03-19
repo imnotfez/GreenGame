@@ -5,15 +5,18 @@ using TMPro;
 
 public class TrashCollector : MonoBehaviour
 {
-    public int TrashCollected;
+    public static int TotalTrashCollected; // Static variable to track total trash collected across all instances
     [SerializeField] public int TotalTrashCount;
     public bool HasCollectedAllTrash;
     [SerializeField] private TextMeshProUGUI yourTextVariable;
 
-    public GameObject newObjectPrefab; // Reference to the prefab to instantiate
+    public GameObject firstObjectPrefab; // Reference to the first prefab to instantiate
+    public GameObject secondObjectPrefab; // Reference to the second prefab to instantiate
 
     public Transform instantiateLocation1; // Position for the first instance
     public Transform instantiateLocation2; // Position for the second instance
+
+    private int trashCollectedCounter = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -28,10 +31,18 @@ public class TrashCollector : MonoBehaviour
         {
             // Increment the TrashCollected count
             TrashCollected++;
+            trashCollectedCounter++;
 
-            // Instantiate new objects at specified locations
-            InstantiateNewObject(instantiateLocation1.position, instantiateLocation1.rotation);
-            InstantiateNewObject(instantiateLocation2.position, instantiateLocation2.rotation);
+            if (trashCollectedCounter == 1)
+            {
+                // Instantiate the first object at the first location
+                InstantiateNewObject(firstObjectPrefab, instantiateLocation1.position, instantiateLocation1.rotation);
+            }
+            else if (trashCollectedCounter == 2)
+            {
+                // Instantiate the second object at the second location
+                InstantiateNewObject(secondObjectPrefab, instantiateLocation2.position, instantiateLocation2.rotation);
+            }
 
             // Destroy the collided object
             Destroy(collision.gameObject);
@@ -47,21 +58,21 @@ public class TrashCollector : MonoBehaviour
         if (yourTextVariable != null)
         {
             // Update the text with the number of trash collected
-            yourTextVariable.text = "Trash Collected: " + TrashCollected.ToString();
+            yourTextVariable.text = "Seeds Planted: " + TrashCollected.ToString();
         }
     }
 
-    void InstantiateNewObject(Vector3 position, Quaternion rotation)
+    void InstantiateNewObject(GameObject prefab, Vector3 position, Quaternion rotation)
     {
-        // Check if the newObjectPrefab is assigned
-        if (newObjectPrefab != null)
+        // Check if the prefab is assigned
+        if (prefab != null)
         {
             // Instantiate the prefab at the specified position and rotation
-            Instantiate(newObjectPrefab, position, rotation);
+            Instantiate(prefab, position, rotation);
         }
         else
         {
-            Debug.LogWarning("New object prefab is not assigned!");
+            Debug.LogWarning("Prefab is not assigned!");
         }
     }
 
@@ -74,5 +85,14 @@ public class TrashCollector : MonoBehaviour
             HasCollectedAllTrash = true;
             // You can add additional logic here when all trash is collected
         }
+    }
+
+    // Instance variable to track trash collected by this instance
+    private int TrashCollected;
+
+    // Update the total trash collected across all instances when this instance is destroyed
+    private void OnDestroy()
+    {
+        TotalTrashCollected += TrashCollected;
     }
 }
