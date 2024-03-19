@@ -10,10 +10,11 @@ public class TrashCollector : MonoBehaviour
     public bool HasCollectedAllTrash;
     [SerializeField] private TextMeshProUGUI yourTextVariable;
 
+    public GameObject newObjectPrefab; // Reference to the prefab to instantiate
+
     // Start is called before the first frame update
     void Start()
     {
-
         UpdateText();
     }
 
@@ -24,6 +25,12 @@ public class TrashCollector : MonoBehaviour
         {
             // Increment the TrashCollected count
             TrashCollected++;
+
+            // Instantiate a new object at a specific position
+            InstantiateNewObject();
+
+            // Destroy the collided object
+            Destroy(collision.gameObject);
 
             // Update the TMP Text
             UpdateText();
@@ -40,6 +47,20 @@ public class TrashCollector : MonoBehaviour
         }
     }
 
+    void InstantiateNewObject()
+    {
+        // Check if the newObjectPrefab is assigned
+        if (newObjectPrefab != null)
+        {
+            // Instantiate the prefab at a specific position (you can adjust the position as needed)
+            Instantiate(newObjectPrefab, transform.position + new Vector3(1, 0, 0), Quaternion.identity);
+        }
+        else
+        {
+            Debug.LogWarning("New object prefab is not assigned!");
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -47,7 +68,7 @@ public class TrashCollector : MonoBehaviour
         if (TrashCollected >= TotalTrashCount)
         {
             HasCollectedAllTrash = true;
-            // You can add additional logic here when all trash is collecte
+            // You can add additional logic here when all trash is collected
         }
     }
 }
