@@ -1,20 +1,22 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
 public class TrashCollector : MonoBehaviour
 {
     public static int TotalTrashCollected; // Static variable to track total trash collected across all instances
-    public int TotalTrashCount;
+    [SerializeField] public int TotalTrashCount;
     public bool HasCollectedAllTrash;
     [SerializeField] private TextMeshProUGUI yourTextVariable;
-
-    public GameObject firstObjectPrefab; // Reference to the first prefab to instantiate
-    public GameObject secondObjectPrefab; // Reference to the second prefab to instantiate
-
+    [SerializeField] public GameObject firstObjectPrefab; // Reference to the first prefab to instantiate
+    [SerializeField] public GameObject secondObjectPrefab; // Reference to the second prefab to instantiate
     public Transform instantiateLocation1; // Position for the first instance
     public Transform instantiateLocation2; // Position for the second instance
+    public ParticleSystem waterParticleSystem; // Reference to the water particle system
 
     private int trashCollectedCounter = 0;
+    private int TrashCollected; // Instance variable to track trash collected by this instance
 
     // Start is called before the first frame update
     void Start()
@@ -47,6 +49,23 @@ public class TrashCollector : MonoBehaviour
 
             // Update the TMP Text
             UpdateText();
+
+            // Play the water particle system
+            if (waterParticleSystem != null)
+            {
+                waterParticleSystem.Play();
+                // Stop the particle system after 2 seconds
+                StartCoroutine(StopParticleSystemAfterDelay(2f));
+            }
+        }
+    }
+
+    IEnumerator StopParticleSystemAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (waterParticleSystem != null)
+        {
+            waterParticleSystem.Stop();
         }
     }
 
@@ -84,9 +103,6 @@ public class TrashCollector : MonoBehaviour
             // You can add additional logic here when all trash is collected
         }
     }
-
-    // Instance variable to track trash collected by this instance
-    private int TrashCollected;
 
     // Update the total trash collected across all instances when this instance is destroyed
     private void OnDestroy()
