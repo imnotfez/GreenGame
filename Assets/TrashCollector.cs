@@ -1,12 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
 public class TrashCollector : MonoBehaviour
 {
     public static int TotalTrashCollected; // Static variable to track total trash collected across all instances
-    [SerializeField] public int TotalTrashCount;
+    public int TotalTrashCount;
     public bool HasCollectedAllTrash;
     [SerializeField] private TextMeshProUGUI yourTextVariable;
 
