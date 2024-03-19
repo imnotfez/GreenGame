@@ -12,6 +12,9 @@ public class TrashCollector : MonoBehaviour
 
     public GameObject newObjectPrefab; // Reference to the prefab to instantiate
 
+    public Transform instantiateLocation1; // Position for the first instance
+    public Transform instantiateLocation2; // Position for the second instance
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,8 +29,9 @@ public class TrashCollector : MonoBehaviour
             // Increment the TrashCollected count
             TrashCollected++;
 
-            // Instantiate a new object at a specific position
-            InstantiateNewObject();
+            // Instantiate new objects at specified locations
+            InstantiateNewObject(instantiateLocation1.position, instantiateLocation1.rotation);
+            InstantiateNewObject(instantiateLocation2.position, instantiateLocation2.rotation);
 
             // Destroy the collided object
             Destroy(collision.gameObject);
@@ -47,13 +51,13 @@ public class TrashCollector : MonoBehaviour
         }
     }
 
-    void InstantiateNewObject()
+    void InstantiateNewObject(Vector3 position, Quaternion rotation)
     {
         // Check if the newObjectPrefab is assigned
         if (newObjectPrefab != null)
         {
-            // Instantiate the prefab at a specific position (you can adjust the position as needed)
-            Instantiate(newObjectPrefab, transform.position + new Vector3(1, 0, 0), Quaternion.identity);
+            // Instantiate the prefab at the specified position and rotation
+            Instantiate(newObjectPrefab, position, rotation);
         }
         else
         {
