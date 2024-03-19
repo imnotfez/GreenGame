@@ -47,7 +47,7 @@ public class TrashCollector : MonoBehaviour
         if (TrashCollected >= TotalTrashCount)
         {
             HasCollectedAllTrash = true;
-            // You can add additional logic here when all trash is collected
+            // You can add additional logic here when all trash is collecte
         }
     }
 }
